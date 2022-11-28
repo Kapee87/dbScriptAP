@@ -1,0 +1,155 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema biblioteca
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema biblioteca
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `biblioteca` ;
+USE `biblioteca` ;
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Domicilio`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Domicilio` (
+  `id` INT NOT NULL,
+  `direccionPostal` VARCHAR(45) NULL,
+  `pueblo/ciudad` VARCHAR(45) NULL,
+  `codigoPostal` INT(4) NULL,
+  `provincia` VARCHAR(45) NULL,
+  `pais` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Persona`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Persona` (
+  `id` INT NOT NULL,
+  `Nombre` VARCHAR(45) NULL,
+  `Apellido` VARCHAR(45) NULL,
+  `FechaNac` DATE NULL,
+  `Telefono` VARCHAR(45) NULL,
+  `correo` VARCHAR(45) NULL,
+  `descripcion` VARCHAR(200) NULL,
+  `urlFoto` VARCHAR(45) NULL,
+  `Domicilio_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Domicilio_id`),
+  INDEX `fk_Persona_Domicilio1_idx` (`Domicilio_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Persona_Domicilio1`
+    FOREIGN KEY (`Domicilio_id`)
+    REFERENCES `biblioteca`.`Domicilio` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Educacion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Educacion` (
+  `id` INT NOT NULL,
+  `Nombre Instituto/escuela` VARCHAR(45) NULL,
+  `logoUrl` VARCHAR(45) NULL,
+  `carrera/título` VARCHAR(45) NULL,
+  `año` VARCHAR(4) NULL,
+  `Persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Persona_id`),
+  INDEX `fk_Educacion_Persona1_idx` (`Persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Educacion_Persona1`
+    FOREIGN KEY (`Persona_id`)
+    REFERENCES `biblioteca`.`Persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Proyectos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Proyectos` (
+  `id` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `fechaRealizacion` DATE NULL,
+  `descripcion` VARCHAR(200) NULL,
+  `url/link` VARCHAR(45) NULL,
+  `Persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Persona_id`),
+  INDEX `fk_Proyectos_Persona1_idx` (`Persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Proyectos_Persona1`
+    FOREIGN KEY (`Persona_id`)
+    REFERENCES `biblioteca`.`Persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Usuarios`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Usuarios` (
+  `id` INT NOT NULL,
+  `Username` VARCHAR(45) NULL,
+  `Password` VARCHAR(16) NULL,
+  `Persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Persona_id`),
+  INDEX `fk_Usuarios_Persona1_idx` (`Persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Usuarios_Persona1`
+    FOREIGN KEY (`Persona_id`)
+    REFERENCES `biblioteca`.`Persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Experiencia Laboral`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Experiencia Laboral` (
+  `id` INT NOT NULL,
+  `NombreEmpresa` VARCHAR(45) NULL,
+  `esTrabajoActual` TINYINT NULL,
+  `Puesto` VARCHAR(45) NULL,
+  `periodo` VARCHAR(45) NULL,
+  `descripcionTareas` VARCHAR(200) NULL,
+  `logoUrl` VARCHAR(45) NULL,
+  `Persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Persona_id`),
+  INDEX `fk_Experiencia Laboral_Persona1_idx` (`Persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Experiencia Laboral_Persona1`
+    FOREIGN KEY (`Persona_id`)
+    REFERENCES `biblioteca`.`Persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `biblioteca`.`Tecnologías`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `biblioteca`.`Tecnologías` (
+  `id` INT NOT NULL,
+  `nombre` VARCHAR(45) NULL,
+  `logoUrl` VARCHAR(45) NULL,
+  `porcentaje/cantidad` VARCHAR(45) NULL,
+  `Persona_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `Persona_id`),
+  INDEX `fk_Tecnologías_Persona1_idx` (`Persona_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Tecnologías_Persona1`
+    FOREIGN KEY (`Persona_id`)
+    REFERENCES `biblioteca`.`Persona` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
